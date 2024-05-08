@@ -14,6 +14,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import type { DeepReadonly } from 'vue'
 import type { TimeSlotModel } from '@/composables/useTimeSlotsConfiguration'
 
 import { Checkbox } from '@/components/ui/checkbox'
@@ -22,7 +23,7 @@ const props = withDefaults(
   defineProps<{
     isAvailable: boolean
     day?: string
-    timeSlots?: TimeSlotModel[]
+    timeSlots?: DeepReadonly<TimeSlotModel[]>
   }>(),
   {
     isAvailable: false,
