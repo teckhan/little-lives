@@ -39,7 +39,7 @@
     </div>
 
     <div class="flex items-center space-x-2.5">
-      <Checkbox id="canAllowVideoTourCall" v-model="canAllowVideoTourCall" />
+      <Checkbox id="canAllowVideoTourCall" v-model:checked="canAllowVideoTourCall" />
       <Label for="canAllowVideoTourCall">Allow video tour call</Label>
     </div>
   </form>
@@ -47,7 +47,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import { TimeSlotConfigurationModel } from '@/composables/useTimeSlotsConfiguration'
+import type { TimeSlotConfigurationModel } from '@/composables/useTimeSlotsConfiguration'
 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

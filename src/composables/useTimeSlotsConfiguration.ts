@@ -1,7 +1,7 @@
 import { ref, unref, reactive, readonly } from 'vue'
 
 // #region types
-interface TimeSlotModel {
+export interface TimeSlotModel {
   id: string
   startAt: Date
   endAt: Date
@@ -57,6 +57,10 @@ const useTimeSlotsConfiguration = () => {
   const remove = (day: DayKey, timeSlotId: string) => {
     list.value[day].timeSlots = unref(list)[day].timeSlots.filter(({ id }) => id !== timeSlotId)
   }
+
+  const toggleDay = (day: DayKey, isAvailable: boolean) => {
+    list.value[day].isAvailable = isAvailable
+  }
   // #endregion
 
   // #region configuration
@@ -84,6 +88,7 @@ const useTimeSlotsConfiguration = () => {
     changeConfiguration,
 
     list: readonly(list),
+    toggleDay,
     add,
     remove
   }
