@@ -1,5 +1,7 @@
 # Booking System
 
+Access GitHub Pages via: https://teckhan.github.io/little-lives/
+
 ## Project Setup
 
 ```sh
