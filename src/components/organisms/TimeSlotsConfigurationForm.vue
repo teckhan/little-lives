@@ -46,8 +46,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref, unref, watch } from 'vue'
 import type { TimeSlotConfigurationModel } from '@/composables/useTimeSlotsConfiguration'
+
+import useTimeSlotsConfiguration from '@/composables/useTimeSlotsConfiguration'
 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -61,9 +63,11 @@ import {
   SelectValue
 } from '@/components/ui/select'
 
-const visitDuration = ref<TimeSlotConfigurationModel['visitDuration'] | undefined>()
-const maximumBookingSlotAmount = ref(1)
-const canAllowVideoTourCall = ref(false)
+const { configuration } = useTimeSlotsConfiguration()
+
+const visitDuration = ref<TimeSlotConfigurationModel['visitDuration'] | undefined>(unref(configuration).visitDuration)
+const maximumBookingSlotAmount = ref(unref(configuration).maximumBookingSlotAmount)
+const canAllowVideoTourCall = ref(unref(configuration).canAllowVideoTourCall)
 
 const emit = defineEmits<{
     'on-change-configuration': [

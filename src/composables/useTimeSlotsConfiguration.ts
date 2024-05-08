@@ -1,4 +1,5 @@
-import { ref, unref, reactive, readonly } from 'vue'
+import { unref, reactive, readonly } from 'vue'
+import { useStorage } from '@vueuse/core'
 
 // #region types
 export interface TimeSlotModel {
@@ -31,21 +32,42 @@ const defaultTimeSlotConfigurationByDay = (
   }
   return acc
 }, {} as TimeSlotConfigurationByDayModel)
+const list = useStorage<TimeSlotConfigurationByDayModel>(
+    'timeSlotConfigurationList',
+    defaultTimeSlotConfigurationByDay,
+    localStorage,
+    {
+        writeDefaults: true,
+        serializer: {
+            read: v => (!v || v === 'undefined' ? defaultTimeSlotConfigurationByDay : JSON.parse(v)),
+            write: v => JSON.stringify(v)
+        }
+    }
+)
 
-const useTimeSlotsConfiguration = () => {
-  // TODO: persist
-  const list = ref<TimeSlotConfigurationByDayModel>(defaultTimeSlotConfigurationByDay)
-  // TODO: persist
-  const configuration = reactive<TimeSlotConfigurationModel>({
+const defaultTimeSlotConfiguration = {
     canAllowVideoTourCall: false,
     maximumBookingSlotAmount: 1,
     visitDuration: undefined
-  })
+  }
+const configuration = useStorage<TimeSlotConfigurationModel>(
+    'timeSlotConfiguration',
+    defaultTimeSlotConfiguration,
+    localStorage,
+    {
+        writeDefaults: true,
+        serializer: {
+            read: v => (!v || v === 'undefined' ? defaultTimeSlotConfiguration : JSON.parse(v)),
+            write: v => JSON.stringify(v)
+        }
+    }
+)
 
+const useTimeSlotsConfiguration = () => {
   // #region by day list
   const add = (day: DayKey, timeSlot: Omit<TimeSlotModel, 'id' | 'endAt'>) => {
     const id = crypto.randomUUID()
-    const _visitDurationInMS = parseInt(configuration.visitDuration ?? '60') * 60 * 1000
+    const _visitDurationInMS = parseInt(unref(configuration).visitDuration ?? '60') * 60 * 1000
 
     list.value[day].timeSlots.push({
       id,
@@ -71,13 +93,13 @@ const useTimeSlotsConfiguration = () => {
   }: Partial<TimeSlotConfigurationModel>) => {
     // patch
     if (canAllowVideoTourCall !== undefined)
-      configuration.canAllowVideoTourCall = canAllowVideoTourCall
+      configuration.value.canAllowVideoTourCall = canAllowVideoTourCall
 
     if (maximumBookingSlotAmount !== undefined)
-      configuration.maximumBookingSlotAmount = maximumBookingSlotAmount
+      configuration.value.maximumBookingSlotAmount = maximumBookingSlotAmount
 
     if (visitDuration !== undefined) {
-      configuration.visitDuration = visitDuration
+      configuration.value.visitDuration = visitDuration
       // TODO: reconciliate list
     }
   }
