@@ -4,7 +4,7 @@
       <h1 class="text-4xl font-bold text-gray-300">LittleLives Frontend Challenge 1 - Wong Teck Han</h1>
     </section>
     
-    <section>
+    <section class="space-y-2.5">
       <h2 class="text-3xl font-bold text-gray-800">Settings Form</h2>
       <TimeSlotsConfiguration />
     </section>
